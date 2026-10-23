@@ -11,8 +11,8 @@ android {
         applicationId = "dev.spacechat"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures { compose = true }
@@ -40,6 +40,13 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp-sse:4.12.0")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("org.commonmark:commonmark:0.24.0")
+    implementation("org.commonmark:commonmark-ext-gfm-tables:0.24.0")
+    implementation("org.commonmark:commonmark-ext-gfm-strikethrough:0.24.0")
+    implementation("org.commonmark:commonmark-ext-task-list-items:0.24.0")
+    // Native vector formula renderer; no WebView, network requests or JavaScript.
+    implementation("ru.noties:jlatexmath-android:0.2.0")
+    implementation("ru.noties:jlatexmath-android-font-cyrillic:0.2.0")
+    implementation("ru.noties:jlatexmath-android-font-greek:0.2.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
