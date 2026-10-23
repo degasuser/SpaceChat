@@ -17,7 +17,24 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.commonmark.node.*
+import org.commonmark.node.BlockQuote
+import org.commonmark.node.BulletList
+import org.commonmark.node.Code
+import org.commonmark.node.Emphasis
+import org.commonmark.node.FencedCodeBlock
+import org.commonmark.node.HardLineBreak
+import org.commonmark.node.Heading
+import org.commonmark.node.HtmlBlock
+import org.commonmark.node.HtmlInline
+import org.commonmark.node.Image
+import org.commonmark.node.IndentedCodeBlock
+import org.commonmark.node.Link
+import org.commonmark.node.Node
+import org.commonmark.node.OrderedList
+import org.commonmark.node.SoftLineBreak
+import org.commonmark.node.StrongEmphasis
+import org.commonmark.node.Text as MarkdownLiteral
+import org.commonmark.node.ThematicBreak
 import org.commonmark.parser.Parser
 
 private val markdownParser = Parser.builder().build()
@@ -60,7 +77,7 @@ private fun MarkdownBlock(node: Node) {
 private fun inlineText(node: Node): AnnotatedString = buildAnnotatedString {
     fun appendNode(n: Node) {
         when(n) {
-            is Text -> append(n.literal)
+            is MarkdownLiteral -> append(n.literal)
             is Code -> withStyle(SpanStyle(fontFamily = FontFamily.Monospace, background = Color(0x223B91A8))) { append(n.literal) }
             is SoftLineBreak, is HardLineBreak -> append("\n")
             is StrongEmphasis -> withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { var c=n.firstChild; while(c!=null){appendNode(c);c=c.next} }

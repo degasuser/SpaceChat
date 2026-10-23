@@ -15,6 +15,12 @@
 
 Идентификаторы моделей приложение не выдумывает: выберите полученный от сервера ID либо введите его из документации своего провайдера.
 
+## Скриншот
+
+Реальный запуск на Android 8.0 (API 26), светлая тема:
+
+<img src="docs/screenshots/home-light.png" width="270" alt="Главный экран SpaceChat на Android 8.0" />
+
 ## Сборка
 
 Нужны JDK 17, Android SDK Platform 35 и Build Tools 35.0.0. Android Studio с установленным SDK подходит.
