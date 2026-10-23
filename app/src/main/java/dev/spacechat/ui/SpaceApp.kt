@@ -7,6 +7,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -227,8 +229,8 @@ private fun SettingsScreen(vm: SpaceViewModel, settings: ApiSettings) {
         LazyColumn(Modifier.padding(padding).fillMaxSize(), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             item { SectionLabel("01 / API CONNECTION") }
             item { Text("Ключ и контекст отправляются только на указанный вами HTTPS-сервер. Выберите провайдера, которому доверяете.", style = MaterialTheme.typography.bodySmall) }
-            item { OutlinedTextField(url, { url = it }, label = { Text("Base URL") }, placeholder = { Text("https://ваш-сервер/v1") }, singleLine = true, modifier = Modifier.fillMaxWidth()) }
-            item { OutlinedTextField(key, { key = it; vm.unsavedApiKey = it }, label = { Text("API Key") }, visualTransformation = if(visible) VisualTransformation.None else PasswordVisualTransformation(), singleLine = true, modifier = Modifier.fillMaxWidth(), trailingIcon = { TextButton(onClick = { visible = !visible }) { Text(if(visible) "Скрыть" else "Показать") } }) }
+            item { OutlinedTextField(url, { url = it }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, autoCorrectEnabled = false), label = { Text("Base URL") }, placeholder = { Text("https://ваш-сервер/v1") }, singleLine = true, modifier = Modifier.fillMaxWidth()) }
+            item { OutlinedTextField(key, { key = it; vm.unsavedApiKey = it }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false), label = { Text("API Key") }, visualTransformation = if(visible) VisualTransformation.None else PasswordVisualTransformation(), singleLine = true, modifier = Modifier.fillMaxWidth(), trailingIcon = { TextButton(onClick = { visible = !visible }) { Text(if(visible) "Скрыть" else "Показать") } }) }
             item { OutlinedTextField(model, { model = it }, label = { Text("Model ID по умолчанию") }, supportingText = { Text("Используется для новых диалогов") }, singleLine = true, modifier = Modifier.fillMaxWidth()) }
             item { OutlinedButton(onClick = { vm.fetchModels(config()) }, enabled = !loading, modifier = Modifier.fillMaxWidth()) { if(loading) CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp); Text(if(loading) "  Проверка…" else "Проверить API / получить модели") } }
             if(models.isNotEmpty()) item { Column {
@@ -238,7 +240,7 @@ private fun SettingsScreen(vm: SpaceViewModel, settings: ApiSettings) {
                 if(models.size > 30) Text("Все ${models.size} моделей доступны в селекторе чата.", style = MaterialTheme.typography.bodySmall)
             } }
             item { OutlinedTextField(prompt, { prompt = it }, label = { Text("System prompt (необязательно)") }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 6) }
-            item { OutlinedTextField(timeout, { timeout = it.filter(Char::isDigit).take(3) }, label = { Text("Таймаут чтения, секунд · 10–600") }, singleLine = true, modifier = Modifier.fillMaxWidth()) }
+            item { OutlinedTextField(timeout, { timeout = it.filter(Char::isDigit).take(3) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), label = { Text("Таймаут чтения, секунд · 10–600") }, singleLine = true, modifier = Modifier.fillMaxWidth()) }
             item { SwitchRow("Изображения image_url", "Включайте только если API и модель поддерживают этот формат", images) { images = it } }
             item { SectionLabel("02 / TERMINAL SPACE") }
             item { Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) { listOf("system" to "Авто", "dark" to "Тёмная", "light" to "Светлая").forEach { (value, title) -> FilterChip(theme == value, { theme = value }, { Text(title) }) } } }
