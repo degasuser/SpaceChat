@@ -69,9 +69,6 @@ private fun parseMath(state: InlineParserState): ParsedInline? {
     }
     // Leave unmatched delimiters visible, including both dollars of an incomplete block.
     scanner.setPosition(start)
-    if (dollar) {
-        scanner.next(opening)
-        return ParsedInline.of(Text(opening), scanner.position())
-    }
-    return null
+    scanner.next(opening)
+    return ParsedInline.of(Text(opening), scanner.position())
 }

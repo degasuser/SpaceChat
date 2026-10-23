@@ -31,6 +31,8 @@ class MarkdownParserTest {
         val tree = nodes("""Prices: \${'$'}5 and ${'$'}10. Missing ${'$'}${'$'}\frac{1}{2}.""")
         assertTrue(tree.none { it is MathNode })
         assertTrue(tree.filterIsInstance<Text>().joinToString("") { it.literal }.contains("$$"))
+        val unmatched = "Unclosed \\(x + y and \\[z"
+        assertEquals(unmatched, nodes(unmatched).filterIsInstance<Text>().joinToString("") { it.literal })
     }
 
     @Test fun doesNotRenderMathInsideInlineOrFencedOrIndentedCode() {
