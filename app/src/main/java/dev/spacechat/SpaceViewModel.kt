@@ -83,8 +83,7 @@ class SpaceViewModel(application: Application, private val saved: SavedStateHand
     fun attach(uri: Uri) {
         if(_busy.value) return
         action {
-            require(settings.value.imagesEnabled) { "Включите image_url в настройках, если API и модель поддерживают изображения." }
-            val path = repo.images.importAttachment(uri)
+            val path = repo.attachments.importAttachment(uri, settings.value.imagesEnabled)
             removeAttachment()
             saved["attachment"] = path
         }

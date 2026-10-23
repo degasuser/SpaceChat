@@ -7,7 +7,7 @@ import dev.spacechat.network.ChatProvider
 import dev.spacechat.network.WireMessage
 import java.util.UUID
 
-class ChatRepository(val database: ChatDatabase, val provider: ChatProvider, val images: ImageAttachments) {
+class ChatRepository(val database: ChatDatabase, val provider: ChatProvider, val images: ImageAttachments, val attachments: AttachmentRouter) {
     val dao = database.chats()
     suspend fun newChat(model: String): String {
         val id = UUID.randomUUID().toString()

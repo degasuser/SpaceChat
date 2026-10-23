@@ -19,6 +19,8 @@ class UiSmokeTest {
         compose.onNodeWithText("Новый чат").performClick()
         compose.waitUntil(10000) { compose.onAllNodesWithText("Сообщение…").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithText("Сообщение…").performTextInput("Test draft")
+        compose.activityRule.scenario.recreate()
+        compose.onNodeWithText("Test draft").assertIsDisplayed()
         compose.onNodeWithContentDescription("Отправить").performClick()
         compose.waitUntil(10000) { compose.onAllNodesWithText("Укажите Base URL и API-ключ в настройках.").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithText("Test draft").assertIsDisplayed()

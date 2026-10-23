@@ -1,6 +1,6 @@
 # SpaceChat
 
-Лёгкий нативный Android-клиент для общения с пользовательским OpenAI-совместимым API. Kotlin, Jetpack Compose, Material 3. Android 8.0+ (API 26).
+Лёгкий нативный Android-клиент для общения с пользовательским OpenAI-совместимым API. Kotlin, Jetpack Compose, Material 3. Android 8.0+ (API 26). Стандартный desugaring Java API обеспечивает совместимость CommonMark с Android 8–9.
 
 ## Возможности версии 0.1
 
@@ -75,7 +75,7 @@ Deep Research **отключён**. Интерфейс `ResearchAgent` пред�
 - JUnit + MockWebServer: нормализация URL, контекст и system message, Unicode SSE и фрагментация, завершение/обрыв, отмена, 429, редиректы, ошибки, модели и image_url.
 - Android instrumentation: Room после повторного открытия, каскадное удаление, поиск, восстановление прерванных ответов, Keystore и обнаружение повреждения ciphertext.
 - Compose smoke test: запуск, настройки, создание чата, сохранение ввода при отсутствии подключения.
-- GitHub Actions: lint, unit tests, сборка APK, инструментальные тесты на эмуляторе, APK и отчёты в Artifacts. Тег `v*` публикует prerelease с явной пометкой **DEBUG / TEST** после успешных проверок.
+- GitHub Actions: lint, unit tests, сборка APK, инструментальные тесты на эмуляторах API 26 и 30, APK и отчёты в Artifacts. Тег `v*` публикует prerelease с явной пометкой **DEBUG / TEST** после успешных проверок.
 
 CI не использует пользовательские API-ключи. Совместимость с конкретным MultiAPI нужно проверить на реальном сервере; mock-тесты проверяют протокол, но не возможности стороннего провайдера.
 

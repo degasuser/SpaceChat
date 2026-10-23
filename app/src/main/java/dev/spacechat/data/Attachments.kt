@@ -59,3 +59,15 @@ class UnsupportedDocumentHandler : AttachmentHandler {
     override fun accepts(mime: String) = !mime.startsWith("image/")
     override suspend fun importAttachment(uri: Uri): String = error("Документы PDF, TXT, Markdown и исходный код пока не поддерживаются как вложения. Вставьте текст в сообщение.")
 }
+
+/** Routes SAF documents before checking provider-specific image capabilities. */
+class AttachmentRouter(private val context: Context, private val images: ImageAttachments) {
+    private val handlers: List<AttachmentHandler> = listOf(images, UnsupportedDocumentHandler())
+    suspend fun importAttachment(uri: Uri, imageUrlEnabled: Boolean): String = withContext(Dispatchers.IO) {
+        val mime = context.contentResolver.getType(uri).orEmpty()
+        val handler = handlers.firstOrNull { it.accepts(mime) }
+            ?: error("Этот тип изображения не поддерживается. Выберите JPEG, PNG или WebP.")
+        require(handler !== images || imageUrlEnabled) { "Включите image_url в настройках, если API и модель поддерживают изображения." }
+        handler.importAttachment(uri)
+    }
+}

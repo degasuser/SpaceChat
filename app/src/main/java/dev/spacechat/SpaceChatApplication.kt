@@ -8,6 +8,7 @@ import dev.spacechat.network.OpenAiProvider
 class SpaceChatApplication : Application() {
     val settings by lazy { SecureSettings(this) }
     val repository by lazy {
-        ChatRepository(Room.databaseBuilder(this, ChatDatabase::class.java, "spacechat.db").build(), OpenAiProvider(), ImageAttachments(this))
+        val images = ImageAttachments(this)
+        ChatRepository(Room.databaseBuilder(this, ChatDatabase::class.java, "spacechat.db").build(), OpenAiProvider(), images, AttachmentRouter(this, images))
     }
 }
