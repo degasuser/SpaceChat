@@ -89,4 +89,17 @@ class OpenAiProviderTest {
         val e = runCatching { withTimeout(5000) { provider.models(settings()) } }.exceptionOrNull() as ApiFailure
         assertEquals(302, e.status); assertEquals(1, server.requestCount)
     }
+
+    @Test fun temporaryServerFailureIsNeverAutomaticallyReplayed() = runBlocking {
+        repeat(2) { server.enqueue(MockResponse().setResponseCode(503).setHeader("Retry-After", "0")) }
+        val e = runCatching { withTimeout(5000) { provider.stream(settings(), "id", emptyList()).toList() } }.exceptionOrNull() as ApiFailure
+        assertEquals(503, e.status)
+        assertEquals("Paid completion requests must only be retried by the user", 1, server.requestCount)
+    }
+    @Test fun modelDiscoveryDoesNotAutomaticallyRetryTemporaryFailure() = runBlocking {
+        repeat(2) { server.enqueue(MockResponse().setResponseCode(503).setHeader("Retry-After", "0")) }
+        val e = runCatching { withTimeout(5000) { provider.models(settings()) } }.exceptionOrNull() as ApiFailure
+        assertEquals(503, e.status)
+        assertEquals(1, server.requestCount)
+    }
 }

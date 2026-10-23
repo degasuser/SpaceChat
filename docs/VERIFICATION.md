@@ -5,14 +5,14 @@
 ## Выполнено локально
 
 - `assembleDebug`: успешно, создан debug APK; подпись проверена `apksigner`.
-- `testDebugUnitTest`: **12 тестов, 0 ошибок, 0 пропусков** (MockWebServer).
+- `testDebugUnitTest`: **14 тестов, 0 ошибок, 0 пропусков** (MockWebServer).
 - `lintDebug`: успешно, ошибок нет; остались предупреждения о доступных обновлениях зависимостей.
 - `assembleDebugAndroidTest`: успешно.
 - `connectedDebugAndroidTest`: **4 теста, 0 ошибок, 0 пропусков** на Android 8.0 / API 26 x86_64.
 - GitHub workflow проверен локально `actionlint`.
 - APK установлен на эмулятор. Главный экран отобразился; реальный скриншот сохранён в `docs/screenshots/home-light.png`.
 
-Итоговая команда `./gradlew assembleDebug testDebugUnitTest lintDebug connectedDebugAndroidTest` завершилась **BUILD SUCCESSFUL**.
+Локальные команды `./gradlew assembleDebug testDebugUnitTest lintDebug` и `./gradlew connectedDebugAndroidTest` завершились **BUILD SUCCESSFUL**.
 
 Инструментальные сценарии: восстановление Room после повторного открытия базы, поиск и каскадное удаление; восстановление прерванных сообщений; шифрование AES-GCM и обнаружение повреждения ciphertext; Markdown и копирование кода; навигация, создание чата, сохранение черновика при пересоздании Activity и ошибка незаполненного подключения.
 
@@ -24,4 +24,6 @@
 
 Production-подпись не настроена. APK предназначен для установки и тестирования.
 
-GitHub Actions настроен в `.github/workflows/android.yml` (сборка, lint, unit tests, эмуляторы API 26 и 30, APK Artifacts, тестовые Releases по тегам `v*`). Результат удалённого запуска будет проверен после публикации.
+GitHub Actions настроен в `.github/workflows/android.yml` (сборка, lint, unit tests, эмуляторы API 26 и 30, APK Artifacts, тестовые Releases по тегам `v*`). Удалённая сборка и тесты API 26/30 также прошли: https://github.com/degasuser/SpaceChat/actions/runs/39988958878. Последние результаты: https://github.com/degasuser/SpaceChat/actions.
+
+Дополнительно проверены HTTP 503 с `Retry-After: 0`: и генерация, и список моделей возвращают ошибку без скрытого повторного HTTP-запроса. Для POST используется неповторяемое тело запроса, а подсказка автоповтора для GET подавляется сетевым адаптером.

@@ -26,7 +26,16 @@ import kotlin.coroutines.resumeWithException
 
 class OpenAiProvider(private val allowHttpForTests: Boolean = false) : ChatProvider {
     private val baseClient = OkHttpClient.Builder().retryOnConnectionFailure(false)
-        .followRedirects(false).followSslRedirects(false).build()
+        .followRedirects(false).followSslRedirects(false)
+        .addNetworkInterceptor { chain ->
+            val response = chain.proceed(chain.request())
+            // OkHttp otherwise follows 503 + Retry-After: 0 even when connection retries
+            // are disabled. GET /models must also report this error for a manual retry.
+            if (chain.request().method == "GET" && response.code == 503 &&
+                response.header("Retry-After")?.toLongOrNull() == 0L) {
+                response.newBuilder().removeHeader("Retry-After").build()
+            } else response
+        }.build()
 
     fun endpoint(baseUrl: String, resource: String): HttpUrl {
         val url = baseUrl.trim().toHttpUrl()
@@ -65,7 +74,7 @@ class OpenAiProvider(private val allowHttpForTests: Boolean = false) : ChatProvi
 
     override fun stream(settings: ApiSettings, model: String, messages: List<WireMessage>): Flow<String> = callbackFlow {
         val request = request(settings, "chat/completions").header("Accept", "text/event-stream")
-            .post(payload(settings, model, messages).toRequestBody("application/json; charset=utf-8".toMediaType())).build()
+            .post(SingleAttemptBody(payload(settings, model, messages).toRequestBody("application/json; charset=utf-8".toMediaType()))).build()
         var completed = false
         var finished = false
         val source = EventSources.createFactory(client(settings)).newEventSource(request, object: EventSourceListener() {
